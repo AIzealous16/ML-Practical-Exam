@@ -1,0 +1,61 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+
+# Load dataset
+df = pd.read_csv("Iris.csv")
+
+print("First 5 Records:")
+print(df.head())
+
+print("\nDataset Shape:")
+print(df.shape)
+
+print("\nColumn Names:")
+print(df.columns)
+
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+print("\nSpecies Count:")
+print(df["Species"].value_counts())
+
+# Input and target
+X = df[[
+    "SepalLengthCm",
+    "SepalWidthCm",
+    "PetalLengthCm",
+    "PetalWidthCm"
+]]
+
+y = df["Species"]
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Decision Tree model
+model = DecisionTreeClassifier(random_state=42)
+
+model.fit(X_train, y_train)
+
+# Prediction
+y_pred = model.predict(X_test)
+
+# Accuracy
+accuracy = accuracy_score(y_test, y_pred)
+
+print("\nDecision Tree Accuracy:")
+print(accuracy * 100, "%")
+
+# Confusion Matrix
+print("\nConfusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+# Classification Report
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))

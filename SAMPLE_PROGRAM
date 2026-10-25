@@ -1,0 +1,30 @@
+import numpy as np 
+import matplotlib.pyplot as plt 
+
+x=np.linspace(-5,5,100)
+
+sigmoid=1/(1+np.exp(-x))
+tanh=np.tanh(x)
+relu=np.maximum(0,x)
+leaky_relu=np.where(x>0,x,0.01*x)
+
+plt.figure(figsize=(10,7))
+
+plt.subplot(2,2,1)
+plt.plot(x,sigmoid)
+plt.title("Sigmoid")
+
+plt.subplot(2,2,2)
+plt.plot(x,tanh)
+plt.title("Tanh")
+
+plt.subplot(2,2,3)
+plt.plot(x,relu)
+plt.title("Relu")
+
+plt.subplot(2,2,4)
+plt.plot(x,leaky_relu)
+plt.title("Leaky_Relu")
+
+plt.tight_layout()
+plt.show()

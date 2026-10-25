@@ -1,0 +1,13 @@
+# ANDNOT function using McCulloch-Pitts neuron
+
+def andnot(x1, x2):
+    net = x1 - x2
+    if net >= 1:
+        return 1
+    else:
+        return 0
+
+print("X1  X2  ANDNOT")
+for x1 in [0, 1]:
+    for x2 in [0, 1]:
+        print(x1, " ", x2, "   ", andnot(x1, x2))

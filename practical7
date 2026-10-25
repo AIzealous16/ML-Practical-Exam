@@ -1,0 +1,42 @@
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# Load dataset
+df = pd.read_csv("SuperMarket Analysis.csv")
+
+# Select transaction attributes
+data = df[["Product line", "Payment", "Customer type", "Gender"]]
+
+# Convert each row into a transaction
+transactions = data.values.tolist()
+
+# Convert transactions into True/False format
+te = TransactionEncoder()
+encoded = te.fit(transactions).transform(transactions)
+basket = pd.DataFrame(encoded, columns=te.columns_)
+
+# Find frequent itemsets
+frequent = apriori(basket, min_support=0.05, use_colnames=True)
+print("Frequent Itemsets:")
+print(frequent)
+
+# Generate association rules
+rules = association_rules(
+    frequent, metric="confidence", min_threshold=0.5
+)
+print("\nAssociation Rules:")
+print(rules[["antecedents", "consequents", "support", "confidence"]])
+
+# Detect outliers in Sales using IQR
+Q1 = df["Sales"].quantile(0.25)
+Q3 = df["Sales"].quantile(0.75)
+IQR = Q3 - Q1
+
+outliers = df[
+    (df["Sales"] < Q1 - 1.5 * IQR) |
+    (df["Sales"] > Q3 + 1.5 * IQR)
+]
+
+print("\nNumber of Outliers:", len(outliers))
+print(outliers[["Invoice ID", "Sales"]])
